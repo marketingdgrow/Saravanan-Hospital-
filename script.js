@@ -126,6 +126,14 @@ const firstAnswer = document.querySelector(".faq-item.active .faq-answer");
 if (firstAnswer) {
   firstAnswer.style.maxHeight = firstAnswer.scrollHeight + "px";
 }
+
+function syncActiveFaqHeight() {
+  const activeAnswer = document.querySelector(".faq-item.active .faq-answer");
+  if (!activeAnswer) return;
+  activeAnswer.style.maxHeight = activeAnswer.scrollHeight + "px";
+}
+
+window.addEventListener("resize", syncActiveFaqHeight);
 // =====================================
 class MenuComponent {
   constructor(menuSelector, triggerSelector) {
@@ -634,44 +642,198 @@ animate();
 
 // ====================
 
-const facilityItems = document.querySelectorAll(".facilities-item");
+const facilityItems = Array.from(document.querySelectorAll(".facilities-item"));
 const detail = document.getElementById("facilityDetail");
+const FACILITIES_TABLET_MAX = 991;
+
+function isFacilitiesCompactView() {
+  return window.innerWidth <= FACILITIES_TABLET_MAX;
+}
+
+function buildFacilityInlineMarkup(item) {
+  const list = (item.dataset.items || "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  return `
+    <h4>${item.dataset.title || ""}</h4>
+    <p>${item.dataset.desc || ""}</p>
+    <ul>${list.map((entry) => `<li>${entry}</li>`).join("")}</ul>
+  `;
+}
+
+function collapseFacilityInline(item) {
+  const inlineDetail = item.querySelector(".facilities-inline-detail");
+  const knowMore = item.querySelector(".facilities-knowmore");
+
+  if (inlineDetail) {
+    item.classList.remove("is-open");
+    inlineDetail.setAttribute("aria-hidden", "true");
+  } else {
+    item.classList.remove("is-open");
+  }
+
+  if (knowMore) {
+    knowMore.textContent = "Know more";
+    knowMore.setAttribute("aria-expanded", "false");
+  }
+}
+
+function expandFacilityInline(item) {
+  const inlineDetail = item.querySelector(".facilities-inline-detail");
+  const knowMore = item.querySelector(".facilities-knowmore");
+  if (!inlineDetail || !knowMore) return;
+
+  inlineDetail.innerHTML = buildFacilityInlineMarkup(item);
+  inlineDetail.style.setProperty(
+    "--facility-open-bg",
+    item.dataset.color || "#4e6fb0"
+  );
+  item.classList.add("is-open");
+  inlineDetail.setAttribute("aria-hidden", "false");
+
+  knowMore.textContent = "Close";
+  knowMore.setAttribute("aria-expanded", "true");
+}
+
+function setActiveFacilityCompact(item) {
+  facilityItems.forEach((current) => {
+    if (current !== item) {
+      current.classList.remove("is-active");
+      collapseFacilityInline(current);
+    }
+  });
+  item.classList.add("is-active");
+}
+
+function updateFacilityDetailPanel(item) {
+  if (!detail || !item) return;
+
+  const list = (item.dataset.items || "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  detail.style.background = item.dataset.color || "#4e6fb0";
+  detail.style.opacity = 0;
+  detail.style.transform = "translateY(6px)";
+
+  setTimeout(() => {
+    detail.innerHTML = `<div class="background-gray">
+      <h2 class="facilities-detail__title">
+        <div class="facilities-detail__icon">&#9877;</div>
+        ${item.dataset.title || ""}
+      </h2>
+      <p>${item.dataset.desc || ""}</p>
+    </div>
+    <h3>What's Included:</h3>
+    <ul>${list.map((entry) => `<li>${entry}</li>`).join("")}</ul>
+    <div class="facilities-detail__actions">
+      <button class="facilities-detail__btn btn-white">View Pediatric</button>
+      <button class="facilities-detail__btn btn-green">View Adult</button>
+    </div>`;
+    detail.style.opacity = 1;
+    detail.style.transform = "translateY(0)";
+  }, 200);
+}
+
+function setActiveFacilityDesktop(item) {
+  facilityItems.forEach((current) => {
+    current.classList.remove("is-active");
+    collapseFacilityInline(current);
+  });
+  item.classList.add("is-active");
+  updateFacilityDetailPanel(item);
+}
 
 facilityItems.forEach((item) => {
-  item.addEventListener("click", () => {
-    facilityItems.forEach((i) => i.classList.remove("is-active"));
-    item.classList.add("is-active");
+  const pill = item.querySelector(".facilities-pill");
+  const knowMore = item.querySelector(".facilities-knowmore");
 
-    /* 🔥 BACKGROUND COLOR SYNC */
-    detail.style.background = item.dataset.color;
+  let inlineDetail = item.querySelector(".facilities-inline-detail");
+  if (!inlineDetail) {
+    inlineDetail = document.createElement("div");
+    inlineDetail.className = "facilities-inline-detail";
+    inlineDetail.setAttribute("aria-hidden", "true");
+    item.appendChild(inlineDetail);
+  }
 
-    const list = item.dataset.items.split(",");
+  if (knowMore) {
+    knowMore.setAttribute("role", "button");
+    knowMore.setAttribute("tabindex", "0");
+    knowMore.setAttribute("aria-expanded", "false");
+  }
 
-    detail.style.opacity = 0;
-    detail.style.transform = "translateY(6px)";
+  const activateCurrent = () => {
+    if (isFacilitiesCompactView()) {
+      setActiveFacilityCompact(item);
+      return;
+    }
+    setActiveFacilityDesktop(item);
+  };
 
-    setTimeout(() => {
-      detail.innerHTML = `<div class="background-gray"> 
-        <h2 class="facilities-detail__title">
-          <div class="facilities-detail__icon">⚕</div>
-          ${item.dataset.title}
-        </h2>
-        <p>${item.dataset.desc}</p></div>
-        <h3>What's Included:</h3>
-        <ul>${list.map((l) => `<li>${l.trim()}</li>`).join("")}</ul>
-        <div class="facilities-detail__actions">
-          <button class="facilities-detail__btn btn-white">View Pediatric</button>
-          <button class="facilities-detail__btn btn-green">View Adult</button>
-        </div>
-      `;
-      detail.style.opacity = 1;
-      detail.style.transform = "translateY(0)";
-    }, 200);
+  pill?.addEventListener("click", activateCurrent);
+  item.addEventListener("click", (event) => {
+    if (event.target.closest(".facilities-knowmore")) return;
+    if (event.target.closest(".facilities-pill")) return;
+    activateCurrent();
+  });
+
+  if (!knowMore) return;
+
+  const toggleInline = (event) => {
+    if (!isFacilitiesCompactView()) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!item.classList.contains("is-active")) {
+      setActiveFacilityCompact(item);
+    }
+
+    if (item.classList.contains("is-open")) {
+      collapseFacilityInline(item);
+      return;
+    }
+
+    expandFacilityInline(item);
+  };
+
+  knowMore.addEventListener("click", toggleInline);
+  knowMore.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      toggleInline(event);
+    }
   });
 });
-// =================================================
 
-let isMobile = window.innerWidth <= 768;
+function applyFacilityModeState() {
+  if (isFacilitiesCompactView()) {
+    facilityItems.forEach((item) => {
+      item.classList.remove("is-active");
+      collapseFacilityInline(item);
+    });
+    return;
+  }
+
+  const firstActiveFacility =
+    document.querySelector(".facilities-item.is-active") || facilityItems[0];
+  if (firstActiveFacility) {
+    setActiveFacilityDesktop(firstActiveFacility);
+  }
+}
+
+let isCompactFacilityMode = isFacilitiesCompactView();
+applyFacilityModeState();
+
+window.addEventListener("resize", () => {
+  const nextMode = isFacilitiesCompactView();
+  if (nextMode === isCompactFacilityMode) return;
+  isCompactFacilityMode = nextMode;
+  applyFacilityModeState();
+});
+// =================================================
 
 const cards = Array.from(document.querySelectorAll(".card"));
 const lTitle = document.getElementById("lTitle");
@@ -679,31 +841,42 @@ const lDesc = document.getElementById("lDesc");
 
 let isAnimating = false;
 
-const X_STEP = 30;
-const Z_STEP = 50;
-const OPACITY_STEP = 0.1;
-
-const EXIT_X = window.innerWidth <= 768 ? -280 : -520;
-const EXIT_Z = -1200;
 const DURATION = 900;
 
+function getCardMotionConfig() {
+  if (window.innerWidth <= 991) {
+    return {
+      xStep: 22,
+      zStep: 40,
+      opacityStep: 0.1,
+      exitX: -360,
+      exitZ: -1000,
+    };
+  }
+
+  return {
+    xStep: 30,
+    zStep: 50,
+    opacityStep: 0.1,
+    exitX: -520,
+    exitZ: -1200,
+  };
+}
+
 function applyStack() {
+  const { xStep, zStep, opacityStep } = getCardMotionConfig();
+
   cards.forEach((card, i) => {
-    const x = i * X_STEP;
-    const z = i * Z_STEP;
-    const opacity = 1 - i * OPACITY_STEP;
+    const x = i * xStep;
+    const z = i * zStep;
+    const opacity = Math.max(0.2, 1 - i * opacityStep);
 
     card.style.transition =
       "transform 0.8s cubic-bezier(.4,0,.2,1), opacity 0.8s ease";
-
-    if (isMobile) {
-      card.style.transform = "none";
-    } else {
-      card.style.transform = `
-    translateX(${x}px)
-    translateZ(${-z}px)
-  `;
-    }
+    card.style.transform = `
+      translateX(${x}px)
+      translateZ(${-z}px)
+    `;
 
     card.style.opacity = opacity;
     card.style.zIndex = 100 - i;
@@ -748,6 +921,7 @@ function applyStack() {
 function next() {
   if (isAnimating) return;
   isAnimating = true;
+  const { exitX, exitZ, xStep, zStep, opacityStep } = getCardMotionConfig();
 
   const front = cards[0];
 
@@ -755,8 +929,8 @@ function next() {
     "transform 0.9s cubic-bezier(.22,1,.36,1), opacity 0.9s ease";
 
   front.style.transform = `
-    translateX(${EXIT_X}px)
-    translateZ(${EXIT_Z}px)
+    translateX(${exitX}px)
+    translateZ(${exitZ}px)
   `;
 
   front.style.opacity = 1;
@@ -770,11 +944,11 @@ function next() {
     backCard.style.transition = "none";
 
     backCard.style.transform = `
-      translateX(${backIndex * X_STEP}px)
-      translateZ(${-backIndex * Z_STEP}px)
+      translateX(${backIndex * xStep}px)
+      translateZ(${-backIndex * zStep}px)
     `;
 
-    backCard.style.opacity = 1 - backIndex * OPACITY_STEP;
+    backCard.style.opacity = Math.max(0.2, 1 - backIndex * opacityStep);
 
     requestAnimationFrame(() => {
       applyStack();
@@ -786,6 +960,7 @@ function next() {
 function prev() {
   if (isAnimating) return;
   isAnimating = true;
+  const { exitX, exitZ } = getCardMotionConfig();
 
   const last = cards[cards.length - 1];
   cards.unshift(cards.pop());
@@ -793,8 +968,8 @@ function prev() {
   last.style.transition = "none";
 
   last.style.transform = `
-    translateX(${EXIT_X}px)
-    translateZ(${EXIT_Z}px)
+    translateX(${exitX}px)
+    translateZ(${exitZ}px)
   `;
 
   last.style.opacity = 1;
@@ -825,6 +1000,7 @@ function resetAuto() {
 }
 
 applyStack();
+window.addEventListener("resize", applyStack);
 
 const services = [
   {
