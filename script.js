@@ -248,7 +248,7 @@ if (isHomePage) {
     });
 
     /* show welcome text AFTER flower builds */
-    tl.to("#logo h2", {
+    tl.to(".entry-text img ", {
       opacity: 1,
       y: 300,
       duration: 0.8,
@@ -688,7 +688,7 @@ function expandFacilityInline(item) {
   inlineDetail.innerHTML = buildFacilityInlineMarkup(item);
   inlineDetail.style.setProperty(
     "--facility-open-bg",
-    item.dataset.color || "#4e6fb0"
+    item.dataset.color || "#4e6fb0",
   );
   item.classList.add("is-open");
   inlineDetail.setAttribute("aria-hidden", "false");
