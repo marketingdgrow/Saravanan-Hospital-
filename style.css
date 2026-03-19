@@ -4696,8 +4696,8 @@ p {
 
   .plus-main {
     position: absolute;
-    right: -100px;
-    top: -100px;
+    right: -60px;
+    top: -60px;
     opacity: 0;
     transform: scale(0);
   }
