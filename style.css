@@ -4658,6 +4658,53 @@ p {
 }
 
 @media (max-width: 768px) {
+  .logo {
+    position: relative;
+    width: 300px;
+    height: 260px;
+    transform-style: preserve-3d;
+  }
+  .entry-text img {
+    width: 330px;
+    object-fit: contain;
+    opacity: 0;
+    transform: translate(-140px, 320px);
+    text-align: center;
+  }
+  /* petals */
+
+  .petal-img {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 50px;
+    transform-origin: 50% 95%;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.2) rotate(0deg);
+    filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.45));
+  }
+  .center-img {
+    position: absolute;
+    left: 50%;
+    bottom: -90px;
+    width: 60px;
+    transform: translateX(-50%) scale(0);
+    opacity: 0;
+  }
+
+  /* plus */
+
+  .plus-main {
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .plus-main img {
+    width: 100px;
+  }
   .facilities-section {
     padding: 26px 14px;
     margin: 24px auto;
