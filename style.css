@@ -2955,7 +2955,13 @@ p {
   align-items: center;
   color: white;
 }
-
+.inner-circle img {
+  background-color: white;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .inner-circle h1 {
   margin: 0;
   font-size: 50px;
@@ -4387,6 +4393,9 @@ p {
   right: 18px;
   bottom: -20px;
 }
+.card-title {
+  display: none;
+}
 
 @media screen and (min-width: 768px) and (max-width: 991px) {
   .main-service.page-section {
@@ -5117,9 +5126,8 @@ p {
     margin: auto;
     padding: 20px 14px 14px;
   }
-  .card-title h2{
-    font-size:30px;
-    
+  .card-title h2 {
+    font-size: 30px;
   }
 
   .card-section .card h2 {
