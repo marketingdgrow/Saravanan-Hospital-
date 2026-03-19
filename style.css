@@ -4660,7 +4660,7 @@ p {
 @media (max-width: 768px) {
   .logo {
     position: relative;
-    width: 300px;
+    width: 100px;
     height: 260px;
     transform-style: preserve-3d;
   }
@@ -4668,7 +4668,7 @@ p {
     width: 330px;
     object-fit: contain;
     opacity: 0;
-    transform: translate(-140px, 320px);
+    transform: translate(-40px, 320px);
     text-align: center;
   }
   /* petals */
