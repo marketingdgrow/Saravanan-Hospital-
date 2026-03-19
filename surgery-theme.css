@@ -1,0 +1,685 @@
+/* Surgery Theme Overrides (Yellow)
+   Copy this file for other service pages and only update the color variables. */
+html{
+  font-family: "Poppins", sans-serif;
+}
+.service-theme-yellow {
+  --theme-hero-bg-1: #f7f2aa;
+  --theme-hero-bg-2: #efdf73;
+  --theme-surface: #fffdf1;
+  --theme-surface-soft: #f7efbe;
+  --theme-surface-media: #eadf9a;
+  --theme-border: #ddcb72;
+  --theme-title: #5a4605;
+  --theme-text: #5e5226;
+  --theme-btn-1: #f2cd44;
+  --theme-btn-2: #e7b52a;
+  --theme-btn-text: #3b2b00;
+}
+
+/* Hero */
+.service-theme-yellow .page-top-section {
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.service-theme-yellow .page-top-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(to left, #f8d02075, #f8d020),
+    url("./img/Surgery\ 3d.png") no-repeat;
+
+  background-position: right;
+  background-size: contain;
+
+  filter: blur(6px);
+  transform: scale(1.1); /* prevents blur edge cut */
+  z-index: -1;
+}
+
+.service-theme-yellow .page-top-section::after {
+  content: "";
+  position: absolute;
+  top: -75px;        
+  left: -170px;
+  width: clamp(320px, 160vw, 730px);
+  height: clamp(360px, 130vw, 380px);
+  background: url("./img/bg-ser-1.png") no-repeat center;
+  background-size: contain;
+  transform: rotate(150deg);  
+  pointer-events: none;
+  z-index: 1;
+}
+
+.service-theme-yellow .page-top-section h1 {
+  color: #ffffff; 
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(0, 0, 0, 0.2);
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+.service-theme-yellow .page-left-content {
+  width: 300px;
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-border);
+  box-shadow: 0 12px 28px rgba(130, 106, 6, 0.14);
+}
+
+.service-theme-yellow .page-left-content p {
+  color: #4f4520;
+}
+
+.service-theme-yellow .page-top-layout--hero {
+  align-items: center;
+  gap: clamp(20px, 4vw, 56px);
+}
+
+.service-theme-yellow .hero-mid-title {
+  margin: 0 auto;
+  flex: 1;
+  text-align: center;
+  line-height: 1.04;
+}
+
+.service-theme-yellow .hero-mid-title span {
+  display: block;
+}
+
+/* Treatment Chain */
+/* .service-theme-yellow .treatment-chain-shell {
+  background: #f3e9a7;
+} */
+
+.service-theme-yellow .treatment-chain-intro h2 {
+  color: #000000;
+}
+
+.service-theme-yellow .treatment-chain-intro p {
+  color: var(--theme-text);
+}
+
+.service-theme-yellow .treatment-chain-btn {
+  background: linear-gradient(145deg, #fcdd60, #ecc245);
+
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(255, 255, 0, 0.4);
+  color: var(--theme-btn-text);
+}
+
+.service-theme-yellow .treatment-chain-btn:hover {
+  background: linear-gradient(135deg, var(--theme-btn-1), var(--theme-btn-2));
+
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(255, 255, 0, 0.4);
+}
+
+.service-theme-yellow .treatment-column::before {
+  background: linear-gradient(
+    180deg,
+    rgba(147, 122, 12, 0.12) 0%,
+    rgba(147, 122, 12, 0.26) 50%,
+    rgba(147, 122, 12, 0.08) 100%
+  );
+}
+
+.service-theme-yellow .treatment-card-body{
+  background: var(--theme-surface-soft);
+  border: 1px solid var(--theme-border);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(255, 255, 234, 0.4);
+}
+
+.service-theme-yellow .treatment-card-body:hover {
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(54, 54, 54, 0.4);
+}
+
+.service-theme-yellow .treatment-card-media {
+  background: var(--theme-surface-media);
+}
+
+.service-theme-yellow .treatment-card h3 {
+  color: #433605;
+  text-align: left;
+}
+
+.service-theme-yellow .treatment-card p {
+  color: var(--theme-text);
+  text-align: left;
+}
+
+/* Modal: alignment + matching theme */
+.service-theme-yellow .modal-content {
+  background: var(--theme-surface);
+}
+
+.service-theme-yellow #modalImg {
+  border-right: 1px solid var(--theme-border);
+}
+
+.service-theme-yellow .modal-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.service-theme-yellow #modalTitle {
+  color: var(--theme-title);
+  margin: 0;
+}
+
+.service-theme-yellow #modalDesc h3 {
+  color: #4d3e06;
+  margin: 4px 0 8px;
+}
+
+.service-theme-yellow #modalDesc p,
+.service-theme-yellow #modalDesc li {
+  color: var(--theme-text);
+}
+
+.service-theme-yellow .modal-cta-btn {
+  background: linear-gradient(135deg, var(--theme-btn-1), var(--theme-btn-2));
+  border-color: #d3a41e;
+  color: var(--theme-btn-text);
+  box-shadow: 0 10px 22px rgba(149, 118, 10, 0.28);
+}
+
+.service-theme-yellow .modal-cta-btn:hover {
+  box-shadow: 0 14px 26px rgba(149, 118, 10, 0.34);
+}
+
+.service-theme-yellow .modal-cta-btn:focus-visible {
+  outline-color: #9b7f11;
+}
+
+.service-theme-yellow .close {
+  color: #7b6512;
+}
+
+.service-theme-yellow .close:hover {
+  color: #4d3e06;
+}
+
+@media (max-width: 768px) {
+  .service-theme-yellow #modalImg {
+    border-right: 0;
+    border-bottom: 1px solid var(--theme-border);
+  }
+}
+
+/* Surgery page responsive tuning */
+@media (max-width: 1024px) {
+  .service-theme-yellow .page-top-section {
+    min-height: auto;
+    padding: 64px 16px 72px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .service-theme-yellow .page-top-section h1 {
+    font-size: clamp(44px, 8vw, 68px);
+    line-height: 1.06;
+    margin-bottom: 18px;
+  }
+
+  .service-theme-yellow .page-top-layout {
+    width: min(980px, 96%);
+    gap: clamp(18px, 4vw, 34px);
+  }
+
+  .service-theme-yellow .hero-mid-title {
+    font-size: clamp(42px, 7vw, 68px);
+  }
+
+  .service-theme-yellow .page-left-content {
+    max-width: none;
+    padding: 22px 22px 22px 24px;
+  }
+
+  .service-theme-yellow .page-right-image {
+    width: clamp(170px, 28vw, 240px);
+  }
+
+  .service-theme-yellow .treatment-chain-section {
+    margin-bottom: 54px;
+  }
+
+  .service-theme-yellow .treatment-chain-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .service-theme-yellow .treatment-chain-intro {
+    position: static;
+  }
+
+  .service-theme-yellow .treatment-chain-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .service-theme-yellow .treatment-column-right {
+    margin-top: 0;
+  }
+
+  .service-theme-yellow .why-container {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    gap: 26px;
+    padding: 42px 22px;
+  }
+
+  .service-theme-yellow .faq-wrapper {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .service-theme-yellow .faq-left,
+  .service-theme-yellow .faq-right {
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .service-theme-yellow .contact-content {
+    width: 100%;
+  }
+
+  .service-theme-yellow .contact-map {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .service-theme-yellow .page-top-section {
+    padding: 56px 12px 64px;
+  }
+
+  .service-theme-yellow .page-top-layout--hero {
+    align-items: center;
+  }
+
+  .service-theme-yellow .hero-mid-title {
+    order: 1;
+    width: 100%;
+    font-size: clamp(34px, 10vw, 52px);
+  }
+
+  .service-theme-yellow .page-top-layout--hero .page-left-content {
+    order: 2;
+    width: 100%;
+  }
+
+  .service-theme-yellow .page-top-layout--hero .page-right-image {
+    order: 3;
+  }
+
+  .service-theme-yellow .page-top-layout {
+    flex-direction: column;
+    align-items: stretch;
+    width: min(96%, 560px);
+    gap: 14px;
+  }
+
+  .service-theme-yellow .page-left-content {
+    border-radius: 24px;
+    padding: 18px;
+  }
+
+  .service-theme-yellow .page-left-content p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .service-theme-yellow .page-right-image {
+    width: min(68%, 220px);
+    align-self: center;
+    justify-content: center;
+  }
+
+  .service-theme-yellow .treatment-chain-shell {
+    border-radius: 16px;
+    padding: 16px 10px 20px;
+  }
+
+  .service-theme-yellow .treatment-chain-intro h2 {
+    font-size: clamp(30px, 8vw, 42px);
+    text-align: center;
+  }
+
+  .service-theme-yellow .treatment-chain-intro p {
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .service-theme-yellow .treatment-chain-btn {
+    width: 100%;
+    min-width: 0;
+    font-size: 18px;
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+
+  .service-theme-yellow .treatment-column::before {
+    display: none;
+  }
+
+  .service-theme-yellow .treatment-card {
+    max-width: none;
+    padding-left: 0;
+  }
+
+  .service-theme-yellow .treatment-card-body {
+    min-height: auto;
+    border-radius: 20px;
+    padding: 14px;
+  }
+
+  .service-theme-yellow .treatment-card-media {
+    height: 100px;
+    border-radius: 16px;
+  }
+
+  .service-theme-yellow .img-why {
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .service-theme-yellow .why-img1 img,
+  .service-theme-yellow .why-img2-inner2 img {
+    width: min(100%, 320px);
+    height: auto;
+    margin-top: 0;
+  }
+
+  .service-theme-yellow .circle-con {
+    width: 210px;
+    height: 210px;
+    margin: auto;
+  }
+
+  .service-theme-yellow .outer-circle {
+    width: 188px;
+    height: 188px;
+  }
+
+  .service-theme-yellow .inner-circle {
+    width: 122px;
+    height: 122px;
+   
+  }
+
+  .service-theme-yellow .text-circle span {
+    transform-origin: 0 94px;
+    font-size: 18px;
+  }
+
+  .service-theme-yellow .why-heading h2 {
+    font-size: clamp(24px, 7vw, 34px);
+    line-height: 1.2;
+  }
+
+  .service-theme-yellow .why-box-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  .service-theme-yellow .why-box {
+    padding: 16px;
+  }
+
+  .service-theme-yellow .why-box-num {
+    font-size: 46px;
+  }
+
+  .service-theme-yellow .section-title {
+    font-size: 26px;
+  }
+
+  .service-theme-yellow .faq-section {
+    padding: 30px 12px;
+    margin-bottom: 40px;
+  }
+
+  .service-theme-yellow .faq-wrapper {
+    margin-top: 18px;
+    gap: 18px;
+  }
+
+  .service-theme-yellow .faq-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .service-theme-yellow .img-back
+ {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 40px;
+  }
+   .service-theme-yellow .img-front {
+      width: 250px;
+    height: 200px;
+    margin-bottom: 10px;
+    
+   }
+
+  .service-theme-yellow .img-back {
+    position: relative;
+    bottom: 0;
+    left: 0;
+  }
+
+  .service-theme-yellow .img-front {
+    position: relative;
+    top: -28px;
+    left: 0;
+  }
+
+  .service-theme-yellow .faq-question {
+    font-size: 16px;
+    padding-right: 0;
+    gap: 12px;
+  }
+
+  .service-theme-yellow .faq-answer p {
+    font-size: 15px;
+    margin-top: 12px;
+    padding-right: 0;
+  }
+
+  .service-theme-yellow .contact-section {
+    padding: 32px 12px;
+  }
+
+  .service-theme-yellow .contact-header {
+    margin-bottom: 26px;
+  }
+
+  .service-theme-yellow .contact-header h1 {
+    font-size: 30px;
+  }
+
+  .service-theme-yellow .contact-header h3 {
+    font-size: 18px;
+  }
+
+  .service-theme-yellow .contact-header p {
+    font-size: 14px;
+  }
+
+  .service-theme-yellow .contact-content {
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .service-theme-yellow .contact-info,
+  .service-theme-yellow .contact-form {
+    width: 100%;
+  }
+
+  .service-theme-yellow .contact-info {
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .service-theme-yellow .contact-info h4 {
+    font-size: 18px;
+  }
+
+  .service-theme-yellow .contact-info p {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+
+  .service-theme-yellow .contact-form input,
+  .service-theme-yellow .contact-form textarea {
+    font-size: 15px;
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .service-theme-yellow .form-actions {
+    flex-direction: column;
+  }
+
+  .service-theme-yellow .form-actions button {
+    width: 100%;
+    padding: 12px 14px;
+  }
+
+  .service-theme-yellow .contact-map iframe {
+    height: 260px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-theme-yellow .page-top-section h1 {
+    font-size: clamp(34px, 10vw, 44px);
+  }
+
+  .service-theme-yellow .treatment-card h3 {
+    font-size: 20px;
+  }
+
+  .service-theme-yellow .treatment-card p {
+    font-size: 15px;
+    margin-top: 8px;
+  }
+
+  .service-theme-yellow .modal-content {
+    border-radius: 10px;
+    display: block;
+    height: 90%;
+  }
+
+  .service-theme-yellow .modal-text {
+    padding: 16px;
+    text-align: justify;
+  }
+
+  .service-theme-yellow .modal-cta-btn {
+    font-size: 14px;
+    min-height: 50px;
+    text-align: center;
+    padding: 10px 16px;
+  }
+}
+@media screen and (max-width: 539px) {
+.page-top-section__shape{
+  max-height: 40px;
+}
+.service-theme-yellow .page-top-section::after {
+  content: "";
+  position: absolute;
+  top: -135px;        
+  left: -180px;
+  width: clamp(220px, 160vw, 630px);
+  height: clamp(360px, 130vw, 380px);
+  background: url("./img/bg-ser-1.png") no-repeat center;
+  background-size: contain;
+  transform: rotate(160deg);  
+  pointer-events: none;
+  z-index: 1;
+}
+  
+   .treatment-chain-intro p {
+    text-align: justify;
+   }
+  .faq-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px; /* space between images */
+  }
+
+  .img-back,
+  .img-front {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .img-back img,
+  .img-front img {
+    width: 100%;
+    height: 200px; /* SAME HEIGHT */
+    object-fit: cover; /* IMPORTANT */
+    border-radius: 16px;
+  }
+
+  /* remove all overlap */
+  .img-front {
+    margin-top: 0;
+    position: static;
+  }
+
+  .img-back {
+    position: static;
+  }
+
+  .service-theme-yellow .modal-content {
+    border-radius: 10px;
+    display: block;
+    scroll-behavior: smooth;
+  }
+
+  .service-theme-yellow .modal-text {
+    padding: 22px;
+    text-align: justify;
+  }
+    .service-theme-yellow .modal-text #modalTitle {
+      text-align: center;
+    }
+    .service-theme-yellow .modal-text #modalDesc h2{
+      text-align: center;
+    }
+    
+
+  .service-theme-yellow .modal-cta-btn {
+    font-size: 14px;
+    min-height: 50px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+
+}

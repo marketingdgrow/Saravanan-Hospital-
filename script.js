@@ -1,0 +1,1214 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = document.querySelectorAll(".page-section");
+
+  let currentSection = 0;
+  let isScrolling = false;
+
+  /* detect current section */
+  function detectSection() {
+    let scroll = window.scrollY;
+
+    sections.forEach((section, index) => {
+      if (scroll >= section.offsetTop - window.innerHeight / 2) {
+        currentSection = index;
+      }
+    });
+  }
+
+  /* scroll function */
+  function scrollToSection(index) {
+    if (index < 0 || index >= sections.length) return;
+
+    isScrolling = true;
+
+    window.scrollTo({
+      top: sections[index].offsetTop,
+      behavior: "smooth",
+    });
+
+    currentSection = index;
+
+    setTimeout(() => {
+      isScrolling = false;
+    }, 800);
+  }
+
+  /* keyboard navigation */
+  document.addEventListener("keydown", (e) => {
+    if (isScrolling) return;
+
+    detectSection(); // 🔥 always update before moving
+
+    if (e.key === "ArrowDown") {
+      scrollToSection(currentSection + 1);
+      console.log("down");
+    }
+
+    if (e.key === "ArrowUp") {
+      scrollToSection(currentSection - 1);
+      console.log("up");
+    }
+  });
+
+  /* update index while manual scroll */
+  window.addEventListener("scroll", detectSection);
+});
+// ===========================
+const shareBtn = document.getElementById("shareBtn");
+const sharePopup = document.getElementById("shareOptions");
+
+shareBtn.addEventListener("click", () => {
+  const url = "https://maps.app.goo.gl/a7knCTEr6iSEMExW7";
+  const text = document.title;
+
+  // If mobile supports native share
+  if (navigator.share) {
+    navigator
+      .share({
+        title: text,
+        text: text,
+        url: url,
+      })
+      .catch((err) => console.log(err));
+  } else {
+    // Show manual share options
+    sharePopup.style.display =
+      sharePopup.style.display === "flex" ? "none" : "flex";
+
+    document.getElementById(
+      "whatsappShare",
+    ).href = `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`;
+
+    document.getElementById(
+      "facebookShare",
+    ).href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      url,
+    )}`;
+
+    document.getElementById(
+      "twitterShare",
+    ).href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      url,
+    )}&text=${encodeURIComponent(text)}`;
+
+    document.getElementById(
+      "linkedinShare",
+    ).href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      url,
+    )}`;
+  }
+});
+// =====================
+
+const faqItems = document.querySelectorAll(".faq-item");
+
+faqItems.forEach((item) => {
+  item.addEventListener("click", () => {
+    faqItems.forEach((i) => {
+      if (i !== item) {
+        i.classList.remove("active");
+        i.querySelector(".faq-answer").style.maxHeight = null;
+      }
+    });
+
+    item.classList.toggle("active");
+    const answer = item.querySelector(".faq-answer");
+
+    if (item.classList.contains("active")) {
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    } else {
+      answer.style.maxHeight = null;
+    }
+  });
+});
+
+const firstAnswer = document.querySelector(".faq-item.active .faq-answer");
+if (firstAnswer) {
+  firstAnswer.style.maxHeight = firstAnswer.scrollHeight + "px";
+}
+// =====================================
+class MenuComponent {
+  constructor(menuSelector, triggerSelector) {
+    this.menu = document.querySelector(menuSelector);
+    this.trigger = document.querySelector(triggerSelector);
+    this.hamburger = document.querySelector(".hamburger");
+    this.navLinks = document.querySelector(".nav-links");
+
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    // Toggle Services Menu
+    this.trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.menu.classList.toggle("active");
+    });
+
+    // Click outside to close
+    document.addEventListener("click", (e) => {
+      if (!this.menu.contains(e.target) && !this.trigger.contains(e.target)) {
+        this.menu.classList.remove("active");
+      }
+    });
+
+    // Close when clicking overlay background only
+    this.menu.addEventListener("click", (e) => {
+      if (e.target === this.menu) {
+        this.menu.classList.remove("active");
+      }
+    });
+
+    // ESC key close
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        this.menu.classList.remove("active");
+      }
+    });
+
+    // Hamburger toggle
+    if (this.hamburger) {
+      this.hamburger.addEventListener("click", () => {
+        this.navLinks.classList.toggle("active");
+      });
+    }
+  }
+}
+
+new MenuComponent(".sub-menu", ".services-btn");
+
+/* cache elements */
+const entryOverlay = document.getElementById("entryOverlay");
+const home = document.getElementById("home");
+const navLogo = document.getElementById("navLogo");
+const welcomeLogo = document.getElementById("welcomeLogo");
+
+/* ===== ENTRY PLAY ONCE ===== */
+function simplePageLoader() {
+  const loader = document.createElement("div");
+  loader.className = "simple-loader";
+  loader.innerHTML = `<div class="spinner"></div>`;
+  document.body.appendChild(loader);
+
+  window.addEventListener("load", () => {
+    loader.classList.add("fade-out");
+    setTimeout(() => loader.remove(), 600);
+  });
+}
+const isHomePage = document.body.classList.contains("home-page");
+
+if (isHomePage) {
+  // ===== FULL HOME INTRO =====
+  if (sessionStorage.getItem("entryDone")) {
+    entryOverlay.style.display = "none";
+    home.style.opacity = 1;
+
+    // 🔥 trigger hex animation on reload
+    setTimeout(() => {
+      startHexAnimation();
+    }, 400);
+  } else {
+    sessionStorage.setItem("entryDone", "1");
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    /* petals bloom */
+    tl.to(".petal-img", {
+      opacity: 1,
+      scale: 1,
+      rotate: (i, el) => getComputedStyle(el).getPropertyValue("--r"),
+      duration: 1.5,
+      stagger: 0.1,
+    });
+
+    /* center pop */
+    tl.to(".center-img", {
+      opacity: 1,
+      scale: 1.3,
+      duration: 0.6,
+    });
+
+    tl.to(".center-img", {
+      scale: 1,
+      duration: 0.4,
+    });
+
+    /* plus pop */
+    tl.to(".plus-main", {
+      opacity: 1,
+      scale: 1,
+      duration: 0.6,
+    });
+
+    /* show welcome text AFTER flower builds */
+    tl.to("#logo h2", {
+      opacity: 1,
+      y: 300,
+      duration: 0.8,
+    });
+
+    /* move entire logo block to navbar */
+    tl.to("#logo", {
+      duration: 1.2,
+      scale: 0.1,
+      ease: "power3.inOut",
+      x: () =>
+        navLogo.getBoundingClientRect().left -
+        logo.getBoundingClientRect().left +
+        -100,
+      y: () =>
+        navLogo.getBoundingClientRect().top -
+        logo.getBoundingClientRect().top +
+        -90,
+    });
+
+    /* fade overlay */
+    tl.to("#entryOverlay", { opacity: 0, duration: 0.6 });
+    tl.set("#entryOverlay", { display: "none" });
+
+    /* show home */
+    tl.to("#home", {
+      opacity: 1,
+      duration: 0.6,
+      onComplete: startHexAnimation,
+    });
+
+    /* move logo to navbar */
+    tl.to("#welcomeLogo", {
+      duration: 1.2,
+      scale: 0.5,
+      ease: "power3.inOut",
+      x: () =>
+        navLogo.getBoundingClientRect().left -
+        welcomeLogo.getBoundingClientRect().left,
+      y: () =>
+        navLogo.getBoundingClientRect().top -
+        welcomeLogo.getBoundingClientRect().top,
+    });
+
+    /* fade overlay */
+    tl.to("#entryOverlay", { opacity: 0, duration: 0.6 });
+    tl.set("#entryOverlay", { display: "none" });
+    // tl.to("#home", { opacity: 1, duration: 0.6 });
+    tl.to("#home", {
+      opacity: 1,
+      duration: 0.6,
+    });
+  }
+} else {
+  simplePageLoader();
+}
+
+function startHexAnimation() {
+  const allHex = document.querySelectorAll(".hexagon");
+  const centerHex = document.querySelector(".middle-hexagon .hex-4");
+
+  const outerHex = [...allHex].filter((hex) => hex !== centerHex);
+
+  const tl = gsap.timeline();
+
+  gsap.set(".hexagon-container", {
+    perspective: 1200,
+  });
+
+  // TOP HEX (front → back)
+  gsap.set(".top-hexagon .hexagon", {
+    y: "-100vh",
+    z: 900,
+    scale: 5,
+    opacity: 0,
+  });
+
+  // LEFT SIDE (front → back)
+  gsap.set(
+    [
+      ".middle-hexagon .hex-2",
+      ".middle-hexagon .hex-3",
+      ".third-hexagon .hex-3",
+    ],
+    {
+      x: "-140vw",
+      z: 900,
+      scale: 8,
+      opacity: 0,
+    },
+  );
+
+  // RIGHT SIDE (front → back)
+  gsap.set(
+    [
+      ".middle-hexagon .hex-5",
+      ".middle-hexagon .hex-6",
+      ".third-hexagon .hex-5",
+    ],
+    {
+      x: "140vw",
+      z: 900,
+      scale: 8,
+      opacity: 0,
+    },
+  );
+
+  // BOTTOM (front → back)
+  gsap.set(
+    [
+      ".third-hexagon .hex-4",
+      ".bottom-hexagon .hex-4",
+      ".bottom-hexagon .hex-5",
+    ],
+    {
+      y: "140vh",
+      z: 900,
+      scale: 8,
+      opacity: 0,
+    },
+  );
+
+  // CENTER HEX (back → front)
+  gsap.set(centerHex, {
+    scale: 0,
+    z: -800,
+    opacity: 0,
+  });
+
+  // OUTER HEX ANIMATION
+  tl.to(outerHex, {
+    x: 0,
+    y: 0,
+    z: 0,
+    scale: 1,
+    opacity: 1,
+    duration: 1.2,
+    ease: "power4.out",
+    force3D: true,
+  });
+
+  // CENTER COMING FORWARD
+  tl.to(
+    centerHex,
+    {
+      scale: 1.3,
+      z: 200,
+      opacity: 1,
+      duration: 0.6,
+      ease: "back.out(2)",
+      force3D: true,
+    },
+    "-=0.4",
+  ).to(centerHex, {
+    scale: 1,
+    z: 0,
+    duration: 0.4,
+    ease: "power2.out",
+  });
+}
+/* ===== about us===== */
+
+/* ===== DATA ===== */
+document.addEventListener("DOMContentLoaded", () => {
+  const slides = [
+    {
+      img: "https://picsum.photos/seed/1/600/800",
+      text: "Saravana Hospital isn't just another multi-specialty hospital in Chennai.We're the place families trust when health matters most. Since [Year], we've built our reputation one patient at a time—through honest conversations, accurate diagnosis, and treatment plans that respect both your body and your budget.We don't believe in rushing appointments or using complicated medical terms. Our doctors take time to listen, explain clearly, and involve you in every decision about your health.",
+    },
+    {
+      img: "https://picsum.photos/seed/2/600/800",
+      text: "Our pediatric team focuses on safe, gentle, and evidence-based treatment for children of all ages.",
+    },
+    {
+      img: "https://picsum.photos/seed/3/600/800",
+      text: "We use modern diagnostic tools to reduce guesswork and speed up accurate medical decisions.",
+    },
+    {
+      img: "https://picsum.photos/seed/4/600/800",
+      text: "Every consultation is unhurried — doctors explain clearly before prescribing anything.",
+    },
+    {
+      img: "https://picsum.photos/seed/5/600/800",
+      text: "Emergency services are available with trained staff and rapid response protocols.",
+    },
+    {
+      img: "https://picsum.photos/seed/6/600/800",
+      text: "Affordable treatment options are discussed openly — no surprise billing practices.",
+    },
+    {
+      img: "https://picsum.photos/seed/7/600/800",
+      text: "We support preventive healthcare through regular screening and wellness programs.",
+    },
+    {
+      img: "https://picsum.photos/seed/8/600/800",
+      text: "Our specialists collaborate across departments for complex case management.",
+    },
+    {
+      img: "https://picsum.photos/seed/9/600/800",
+      text: "Clean, patient-friendly facilities designed to reduce stress during treatment.",
+    },
+    {
+      img: "https://picsum.photos/seed/10/600/800",
+      text: "Lab services provide fast and reliable reports for quicker treatment decisions.",
+    },
+    {
+      img: "https://picsum.photos/seed/11/600/800",
+      text: "Cardiac and diabetes care programs are structured for long-term monitoring.",
+    },
+    {
+      img: "https://picsum.photos/seed/12/600/800",
+      text: "Women’s health and maternity care handled with privacy and specialized support.",
+    },
+    {
+      img: "https://picsum.photos/seed/13/600/800",
+      text: "Senior citizen care includes medication review and lifestyle management.",
+    },
+    {
+      img: "https://picsum.photos/seed/14/600/800",
+      text: "Digital medical records ensure continuity across visits and departments.",
+    },
+    {
+      img: "https://picsum.photos/seed/15/600/800",
+      text: "Insurance and billing assistance available at the help desk.",
+    },
+    {
+      img: "https://picsum.photos/seed/16/600/800",
+      text: "Surgical units follow strict sterilization and safety standards.",
+    },
+    {
+      img: "https://picsum.photos/seed/17/600/800",
+      text: "Community outreach programs promote early detection and awareness.",
+    },
+    {
+      img: "https://picsum.photos/seed/18/600/800",
+      text: "Our mission is simple — clear communication, correct treatment, consistent follow-up.",
+    },
+  ];
+
+  /* ===== BUILD 5 FIXED SLOTS ===== */
+
+  const strip = document.getElementById("thumbStrip");
+
+  for (let i = 0; i < 5; i++) {
+    const d = document.createElement("div");
+    d.className = "slide-img";
+    strip.appendChild(d);
+  }
+
+  const slots = document.querySelectorAll(".slide-img");
+  const mainImg = document.getElementById("mainImg");
+  const aboutText = document.getElementById("aboutText");
+
+  let centerIndex = 0;
+  let timer;
+
+  /* ===== RENDER WINDOW OF 5 ===== */
+
+  function render() {
+    slots.forEach((slot, pos) => {
+      // position relative to center
+      const offset = pos - 2; // center slot = 2
+      let slideIndex = (centerIndex + offset + slides.length) % slides.length;
+
+      slot.innerHTML = `<img src="${slides[slideIndex].img}">`;
+
+      slot.className = "slide-img pos-" + pos;
+      if (pos === 2) slot.classList.add("active");
+      slot.onclick = () => {
+        strip.classList.add("sliding");
+
+        mainImg.classList.add("fade-out");
+        aboutText.classList.add("fade-out");
+
+        setTimeout(() => {
+          centerIndex = slideIndex;
+          render();
+
+          strip.classList.remove("sliding");
+
+          mainImg.classList.remove("fade-out");
+          aboutText.classList.remove("fade-out");
+        }, 350);
+
+        restartAuto();
+      };
+    });
+
+    mainImg.src = slides[centerIndex].img;
+    aboutText.textContent = slides[centerIndex].text;
+  }
+
+  /* ===== AUTO ===== */
+  function next() {
+    strip.classList.add("sliding");
+
+    mainImg.classList.add("fade-out");
+    aboutText.classList.add("fade-out");
+
+    setTimeout(() => {
+      centerIndex = (centerIndex + 1) % slides.length;
+
+      render();
+
+      strip.classList.remove("sliding");
+
+      mainImg.classList.remove("fade-out");
+      aboutText.classList.remove("fade-out");
+    }, 350);
+  }
+
+  function restartAuto() {
+    clearInterval(timer);
+    timer = setInterval(next, 2500);
+  }
+
+  /* ===== INIT ===== */
+
+  render();
+  restartAuto();
+});
+// =====================================
+// =====================================
+const canvas = document.getElementById("particles-bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particlesArray = [];
+
+const colors = ["#ff4d4d", "#ffd11a", "#66ccff", "#33cc33", "#cc66ff"];
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 6 + 6;
+    this.speedX = (Math.random() - 0.3) * 0.3;
+    this.speedY = (Math.random() - 0.3) * 0.3;
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    // Wrap around instead of bounce (more premium look)
+    if (this.x > canvas.width) this.x = 0;
+    if (this.x < 0) this.x = canvas.width;
+    if (this.y > canvas.height) this.y = 0;
+    if (this.y < 0) this.y = canvas.height;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = 0.7;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+function init() {
+  particlesArray = [];
+  for (let i = 0; i < 15; i++) {
+    particlesArray.push(new Particle());
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particlesArray.forEach((particle) => {
+    particle.update();
+    particle.draw();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  init();
+});
+
+init();
+animate();
+
+// ====================
+
+const facilityItems = document.querySelectorAll(".facilities-item");
+const detail = document.getElementById("facilityDetail");
+
+facilityItems.forEach((item) => {
+  item.addEventListener("click", () => {
+    facilityItems.forEach((i) => i.classList.remove("is-active"));
+    item.classList.add("is-active");
+
+    /* 🔥 BACKGROUND COLOR SYNC */
+    detail.style.background = item.dataset.color;
+
+    const list = item.dataset.items.split(",");
+
+    detail.style.opacity = 0;
+    detail.style.transform = "translateY(6px)";
+
+    setTimeout(() => {
+      detail.innerHTML = `<div class="background-gray"> 
+        <h2 class="facilities-detail__title">
+          <div class="facilities-detail__icon">⚕</div>
+          ${item.dataset.title}
+        </h2>
+        <p>${item.dataset.desc}</p></div>
+        <h3>What's Included:</h3>
+        <ul>${list.map((l) => `<li>${l.trim()}</li>`).join("")}</ul>
+        <div class="facilities-detail__actions">
+          <button class="facilities-detail__btn btn-white">View Pediatric</button>
+          <button class="facilities-detail__btn btn-green">View Adult</button>
+        </div>
+      `;
+      detail.style.opacity = 1;
+      detail.style.transform = "translateY(0)";
+    }, 200);
+  });
+});
+// =================================================
+
+let isMobile = window.innerWidth <= 768;
+
+const cards = Array.from(document.querySelectorAll(".card"));
+const lTitle = document.getElementById("lTitle");
+const lDesc = document.getElementById("lDesc");
+
+let isAnimating = false;
+
+const X_STEP = 30;
+const Z_STEP = 50;
+const OPACITY_STEP = 0.1;
+
+const EXIT_X = window.innerWidth <= 768 ? -280 : -520;
+const EXIT_Z = -1200;
+const DURATION = 900;
+
+function applyStack() {
+  cards.forEach((card, i) => {
+    const x = i * X_STEP;
+    const z = i * Z_STEP;
+    const opacity = 1 - i * OPACITY_STEP;
+
+    card.style.transition =
+      "transform 0.8s cubic-bezier(.4,0,.2,1), opacity 0.8s ease";
+
+    if (isMobile) {
+      card.style.transform = "none";
+    } else {
+      card.style.transform = `
+    translateX(${x}px)
+    translateZ(${-z}px)
+  `;
+    }
+
+    card.style.opacity = opacity;
+    card.style.zIndex = 100 - i;
+  });
+
+  /* COLOR SYNC */
+  const activeColor = cards[0].dataset.color || "#4f9648";
+  document.documentElement.style.setProperty("--accent", activeColor);
+
+  lTitle.innerText = cards[0].dataset.title;
+  lDesc.innerText = cards[0].dataset.desc;
+
+  function darkenColor(color, percent) {
+    const num = parseInt(color.replace("#", ""), 16),
+      amt = Math.round(2.55 * percent),
+      R = (num >> 16) - amt,
+      G = ((num >> 8) & 0x00ff) - amt,
+      B = (num & 0x0000ff) - amt;
+
+    return (
+      "#" +
+      (
+        0x1000000 +
+        (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+        (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+        (B < 255 ? (B < 1 ? 0 : B) : 255)
+      )
+        .toString(16)
+        .slice(1)
+    );
+  }
+
+  const darkColor = darkenColor(activeColor.trim(), 30);
+
+  document.querySelectorAll(".card h2").forEach((h) => {
+    h.style.color = darkColor;
+  });
+
+  lTitle.style.color = darkColor;
+}
+
+function next() {
+  if (isAnimating) return;
+  isAnimating = true;
+
+  const front = cards[0];
+
+  front.style.transition =
+    "transform 0.9s cubic-bezier(.22,1,.36,1), opacity 0.9s ease";
+
+  front.style.transform = `
+    translateX(${EXIT_X}px)
+    translateZ(${EXIT_Z}px)
+  `;
+
+  front.style.opacity = 1;
+
+  setTimeout(() => {
+    cards.push(cards.shift());
+
+    const backIndex = cards.length - 1;
+    const backCard = cards[backIndex];
+
+    backCard.style.transition = "none";
+
+    backCard.style.transform = `
+      translateX(${backIndex * X_STEP}px)
+      translateZ(${-backIndex * Z_STEP}px)
+    `;
+
+    backCard.style.opacity = 1 - backIndex * OPACITY_STEP;
+
+    requestAnimationFrame(() => {
+      applyStack();
+      isAnimating = false;
+    });
+  }, DURATION);
+}
+
+function prev() {
+  if (isAnimating) return;
+  isAnimating = true;
+
+  const last = cards[cards.length - 1];
+  cards.unshift(cards.pop());
+
+  last.style.transition = "none";
+
+  last.style.transform = `
+    translateX(${EXIT_X}px)
+    translateZ(${EXIT_Z}px)
+  `;
+
+  last.style.opacity = 1;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      applyStack();
+      isAnimating = false;
+    });
+  });
+}
+
+document.getElementById("next").onclick = () => {
+  next();
+  resetAuto();
+};
+
+document.getElementById("prev").onclick = () => {
+  prev();
+  resetAuto();
+};
+
+let auto1 = setInterval(next, 9000);
+
+function resetAuto() {
+  clearInterval(auto1);
+  auto1 = setInterval(next, 9000);
+}
+
+applyStack();
+
+const services = [
+  {
+    title: "Surgical Specialties",
+    link: "#",
+    left: "From minor procedures to major operations, our surgical team brings years of experience to the table. We handle everything with precision, using modern techniques that mean faster recovery and less discomfort for you.",
+    right: [
+      "General Surgery (Appendix, Hernia, Gallbladder)",
+      "Laparoscopic Procedures",
+      "Trauma & Accident Care",
+      "Wound Management",
+      "Advanced Operation Theaters with Post-Op ICU Care",
+    ],
+    cta: "knowledge about department",
+    img: "./img/logo-without-name/Surgery BORDER.png",
+    color: "#ffffff",
+  },
+  {
+    title: "Maternity & Fertility",
+    link: "#",
+    left: "Bringing a baby into the world is special, and we treat it that way. Whether you're planning pregnancy, expecting, or need fertility support, our maternity team guides you through every step with care and expertise.",
+    right: [
+      "Normal & Cesarean Deliveries",
+      "High-Risk Pregnancy Management",
+      "Fertility Consultations & Treatment",
+      "Prenatal & Postnatal Care",
+      "24/7 Delivery Suite with Experienced Obstetricians",
+    ],
+    cta: "explore about department",
+    img: "./img/logo-without-name/OBG BORDER.png",
+    color: "#ffffff",
+  },
+  {
+    title: "Pediatrics",
+    link: "#",
+    left: "Kids aren't just small adults—they need doctors who understand growing bodies and worried parents. Our pediatricians treat your child with gentle care while keeping you informed every step of the way.",
+    right: [
+      "Newborn & Infant Care",
+      "Childhood Vaccinations (Complete Schedule)",
+      "Growth & Development Monitoring",
+      "Common Childhood Illnesses",
+      "Child-Friendly Environment with Experienced Pediatricians",
+    ],
+    cta: "knowledge about department",
+    img: "./img/logo-without-name/Pedia.png",
+    color: "#ffffff",
+  },
+  {
+    title: "General Medicine",
+    link: "#",
+    left: "Sometimes you just need a doctor who can figure out what's wrong. Our general physicians handle everything from fever and infections to chronic conditions like diabetes and hypertension, giving you clear answers and practical treatment.",
+    right: [
+      "Diabetes & Thyroid Management",
+      "Hypertension & Heart Health",
+      "Fever, Infections & Viral Illnesses",
+      "Health Check-Ups & Preventive Care",
+      "Same-Day Appointments Available for Urgent Cases",
+    ],
+    cta: "explore about department",
+    img: "./img/logo-without-name/Medicine.png",
+    color: "#ffffff",
+  },
+
+  {
+    title: "ENT (Ear, Nose & Throat)",
+    link: "#",
+    left: "Trouble hearing? Constant sinus headaches? Throat pain that won't quit? Our ENT specialists diagnose and treat conditions affecting your ears, nose, and throat so you can breathe easier, hear better, and feel relief.",
+    right: [
+      "Sinusitis & Nasal Blockage",
+      "Ear Infections & Hearing Problems",
+      "Tonsillitis & Throat Disorders",
+      "Voice & Sleep Apnea Issues",
+      "In-House Endoscopy & Audiometry Testing",
+    ],
+    cta: "knowledge about department",
+    img: "./img/logo-without-name/ENT with border.png",
+    color: "#ffffff",
+  },
+  {
+    title: "Dermatology",
+    link: "#",
+    left: "Skin problems can affect how you feel about yourself. Our dermatologists treat everything from stubborn acne to serious skin conditions, helping you look better and feel more confident in your own skin.",
+    right: [
+      "Acne, Pigmentation & Scar Treatment",
+      "Hair Fall & Scalp Disorders",
+      "Eczema, Psoriasis & Skin Allergies",
+      "Cosmetic Dermatology Procedures",
+      "Advanced Skin Analysis & Personalized Treatment Plans",
+    ],
+    cta: "explore about department",
+    img: "./img/logo-without-name/Dermatology.png",
+    color: "#ffffff",
+  },
+];
+
+const hexBlocks = document.querySelectorAll(".hex-service-block");
+const leftText = document.querySelector(".inner-left-service p");
+const rightList = document.querySelector(".inner-right-service ul");
+const middleImg = document.querySelector(".inner-middle-img img");
+const ctaBtn = document.querySelector(".middle-service-btn");
+const leftBg = document.querySelector(".bg-inner-section-left");
+const rightBg = document.querySelector(".bg-inner-section-right");
+const middleHex = document.querySelector(".service-middle-img");
+
+function updateService(index) {
+  const data = services[index];
+
+  const elements = [leftText, rightList, middleImg, ctaBtn];
+  const containers = [
+    document.querySelector(".main-service-left"),
+    document.querySelector(".main-service-middle"),
+    document.querySelector(".main-service-right"),
+  ];
+
+  /* HEX CLICK BOUNCE */
+  hexBlocks[index].classList.add("hex-bounce");
+  setTimeout(() => {
+    hexBlocks[index].classList.remove("hex-bounce");
+  }, 350);
+
+  /* RESET OLD CLASSES FIRST */
+  elements.forEach((el) => {
+    el.classList.remove("fade-in");
+  });
+
+  containers.forEach((el) => {
+    el.classList.remove("container-in");
+  });
+
+  /* CONTAINER OUT */
+  containers.forEach((el) => el.classList.add("container-out"));
+
+  /* CONTENT FADE OUT */
+  elements.forEach((el) => el.classList.add("fade-out"));
+
+  setTimeout(() => {
+    /* UPDATE TEXT */
+    leftText.textContent = data.left;
+
+    /* UPDATE LIST */
+    rightList.innerHTML = "";
+    data.right.forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      rightList.appendChild(li);
+    });
+
+    /* UPDATE IMAGE */
+    middleImg.src = data.img;
+
+    /* UPDATE BUTTON */
+    ctaBtn.textContent = data.cta;
+    ctaBtn.href = data.link;
+
+    /* UPDATE COLORS */
+    leftBg.style.backgroundColor = data.color;
+    rightBg.style.backgroundColor = data.color;
+    middleHex.style.backgroundColor = data.color;
+
+    /* ACTIVE HEX */
+    hexBlocks.forEach((hex) => hex.classList.remove("active"));
+    hexBlocks[index].classList.add("active");
+
+    /* REMOVE OUT */
+    containers.forEach((el) => el.classList.remove("container-out"));
+    elements.forEach((el) => el.classList.remove("fade-out"));
+
+    /* ADD IN */
+    containers.forEach((el) => el.classList.add("container-in"));
+    elements.forEach((el) => el.classList.add("fade-in"));
+
+    /* CLEANUP (important for next click) */
+    setTimeout(() => {
+      containers.forEach((el) => el.classList.remove("container-in"));
+      elements.forEach((el) => el.classList.remove("fade-in"));
+    }, 500);
+  }, 300);
+}
+hexBlocks.forEach((hex, index) => {
+  hex.addEventListener("click", () => {
+    updateService(index);
+  });
+});
+
+// // Entrance Animation
+// window.addEventListener("load", () => {
+//   document.querySelector(".main-service-content").style.transition =
+//     "all 0.6s ease";
+//   document.querySelector(".main-service-content").style.opacity = "1";
+//   document.querySelector(".main-service-content").style.transform =
+//     "translateY(0)";
+// });
+const boxes = document.querySelectorAll(".why-choose-box");
+const mainText = document.getElementById("mainText");
+
+let index = 0;
+let interval;
+
+function changeContent(i) {
+  boxes.forEach((box) => box.classList.remove("active"));
+  boxes[i].classList.add("active");
+  mainText.textContent = boxes[i].dataset.text;
+  index = i;
+}
+
+boxes.forEach((box, i) => {
+  box.addEventListener("click", () => {
+    changeContent(i);
+    resetAutoSlide();
+  });
+});
+
+function autoSlide() {
+  index++;
+  if (index >= boxes.length) index = 0;
+  changeContent(index);
+}
+
+function resetAutoSlide() {
+  clearInterval(interval);
+  interval = setInterval(autoSlide, 4000);
+}
+function initCircleText() {
+  const textCircle = document.getElementById("textCircle");
+  if (!textCircle) return;
+
+  const text = "CERTIFIED MEDICAL EXCELLENCE ";
+  const letters = text.split("");
+
+  textCircle.innerHTML = "";
+
+  letters.forEach((letter, i) => {
+    const span = document.createElement("span");
+    span.innerText = letter;
+    span.style.transform = `rotate(${i * (360 / letters.length)}deg)`;
+    textCircle.appendChild(span);
+  });
+}
+
+initCircleText();
+// ===========================
+const servicess = [
+  {
+    title: "General Surgery",
+    img: "./img/Surgery 3d.png",
+    short:
+      "Comprehensive surgical care for abdominal and soft tissue conditions.",
+    full: "General surgery includes procedures involving the digestive tract, skin, soft tissues and emergency surgical interventions. Our team ensures safe, minimally invasive, and patient-focused surgical care.",
+  },
+  {
+    title: "Laparoscopic Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Minimally invasive surgery with faster recovery.",
+    full: "Laparoscopic surgery uses small incisions and advanced camera systems to treat abdominal conditions with reduced pain, minimal scarring and quicker recovery time.",
+  },
+  {
+    title: "Laser Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Precision laser procedures for faster healing.",
+    full: "Laser surgery offers high precision treatment with minimal bleeding and reduced recovery time. Commonly used in piles, varicose veins and dermatological procedures.",
+  },
+  {
+    title: "Plastic Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Reconstructive and cosmetic enhancement procedures.",
+    full: "Plastic surgery includes reconstructive procedures for trauma and cosmetic surgeries to enhance physical appearance with advanced techniques.",
+  },
+  {
+    title: "Gastrointestinal Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Advanced digestive system surgeries.",
+    full: "GI surgery treats disorders of stomach, intestines, liver, pancreas and colon using modern surgical techniques.",
+  },
+  {
+    title: "Kidney Stone Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Advanced treatment for renal stones.",
+    full: "Minimally invasive kidney stone removal using laser lithotripsy and endoscopic procedures ensuring quick recovery.",
+  },
+  {
+    title: "Paediatric Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Specialized surgical care for children.",
+    full: "Paediatric surgery provides expert care for congenital and acquired conditions in infants and children.",
+  },
+  {
+    title: "Onco Surgery (Cancer)",
+    img: "./img/Surgery 3d.png",
+
+    short: "Comprehensive cancer surgical treatment.",
+    full: "Onco surgery focuses on tumor removal and cancer management using evidence-based surgical oncology practices.",
+  },
+  {
+    title: "Vascular Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Treatment for blood vessel disorders.",
+    full: "Vascular surgery treats varicose veins, arterial blockages and circulatory disorders using advanced minimally invasive techniques.",
+  },
+  {
+    title: "Hernia Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Safe and effective hernia repair.",
+    full: "Hernia surgery includes laparoscopic and open repair techniques ensuring reduced recurrence and faster healing.",
+  },
+  {
+    title: "Circumcision Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Safe and hygienic circumcision procedures.",
+    full: "Performed using advanced surgical or laser techniques ensuring minimal discomfort and quick recovery.",
+  },
+  {
+    title: "Piles Surgery (Proctology)",
+    img: "./img/Surgery 3d.png",
+
+    short: "Advanced treatment for hemorrhoids.",
+    full: "Laser and minimally invasive procedures for piles ensuring painless treatment and faster return to normal life.",
+  },
+  {
+    title: "Diabetic Foot Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Specialized care for diabetic foot complications.",
+    full: "Surgical management of diabetic foot ulcers and infections preventing complications and amputation.",
+  },
+  {
+    title: "Thyroid & Breast Surgery",
+    img: "./img/Surgery 3d.png",
+
+    short: "Expert endocrine and breast procedures.",
+    full: "Comprehensive thyroid and breast surgeries including tumor removal, biopsy and minimally invasive procedures.",
+  },
+];
+
+const grid = document.querySelector(".card-grid");
+if (grid) {
+  servicess.forEach((service) => {
+    grid.innerHTML += `
+  <article class="card">
+    <div class="card-inner">
+
+      <div class="card-front">
+        <img src="${service.img}" alt="${service.title}">
+        <div class="card-content">
+          <h3>${service.title}</h3>
+          <p>${service.short}</p>
+        </div>
+      </div>
+
+      <div class="card-back">
+        <h3>${service.title}</h3>
+        <p>${service.short}</p>
+        <button onclick="openModal('${service.title}','${service.full}','${service.img}')">
+        View Details
+        </button>
+      </div>
+
+    </div>
+  </article>`;
+  });
+}
+function openModal(title, desc, img) {
+  document.getElementById("modalTitle").innerText = title;
+  document.getElementById("modalDesc").innerText = desc;
+  document.getElementById("modalImg").src = img;
+  document.getElementById("modal").style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+window.onclick = function (e) {
+  if (e.target == document.getElementById("modal")) {
+    closeModal();
+  }
+};

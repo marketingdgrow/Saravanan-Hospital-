@@ -1,0 +1,153 @@
+/* ENT green theme override */
+html{
+  font-family: "Poppins", sans-serif;
+}
+.service-theme-yellow {
+  --theme-hero-bg-1: #e6faec;
+  --theme-hero-bg-2: #bceacb;
+  --theme-surface: #f7fef9;
+  --theme-surface-soft: #e9f9ee;
+  --theme-surface-media: #d6f1df;
+  --theme-border: #a8d7b9;
+  --theme-title: #1d6a3a;
+  --theme-text: #3d684d;
+  --theme-btn-1: #42af6f;
+  --theme-btn-2: #2f8b55;
+  --theme-btn-text: #ffffff;
+}
+
+.service-theme-yellow .page-top-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(to left, #20f85675, #42af6f),
+    url("./img/logo-dep/saravanan 4.png") no-repeat;
+
+  background-position: right;
+  background-size: contain;
+
+  filter: blur(6px);
+  transform: scale(1.1); /* prevents blur edge cut */
+  z-index: -1;
+}
+
+.service-theme-yellow .page-top-section::after {
+  content: "";
+  position: absolute;
+  top: -75px;        
+  left: -170px;
+  width: clamp(320px, 160vw, 730px);
+  height: clamp(360px, 130vw, 380px);
+  background: url("./img/bg-ser-1.png") no-repeat center;
+  background-size: contain;
+  transform: rotate(150deg);  
+  pointer-events: none;
+  z-index: 1;
+}
+
+.service-theme-yellow .page-top-section h1 {
+  color: #ffffff; 
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(0, 0, 0, 0.2);
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+.service-theme-yellow .page-left-content p {
+  color: #355c44;
+}
+
+.service-theme-yellow .treatment-chain-shell {
+  /* background: #d8f1e0; */
+}
+
+.service-theme-yellow .treatment-chain-intro h2 {
+  color: #2e8c57;
+}
+
+.service-theme-yellow .treatment-chain-btn {
+  background: linear-gradient(135deg, #56c483, #3b9f64);
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(233, 233, 233, 0.4);
+}
+.service-theme-yellow .treatment-chain-btn:hover {
+  background: linear-gradient(135deg, #56c483, #3b9f64);
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(37, 37, 37, 0.4);
+}
+
+.service-theme-yellow .treatment-column::before {
+  background: linear-gradient(
+    180deg,
+    rgba(41, 124, 78, 0.12) 0%,
+    rgba(41, 124, 78, 0.26) 50%,
+    rgba(41, 124, 78, 0.08) 100%
+  );
+}
+
+.service-theme-yellow .treatment-card h3 {
+  color: #276b43;
+}
+
+.service-theme-yellow #modalDesc h3 {
+  color: #237647;
+}
+
+.service-theme-yellow .modal-cta-btn {
+  border-color: #399b61;
+  box-shadow: 0 10px 22px rgba(35, 119, 72, 0.28);
+}
+
+.service-theme-yellow .modal-cta-btn:hover {
+  box-shadow: 0 14px 26px rgba(35, 119, 72, 0.36);
+}
+
+.service-theme-yellow .close {
+  color: #2f8a56;
+}
+
+.service-theme-yellow .close:hover {
+  color: #1d5a36;
+}
+
+/* Why Choose section green overrides */
+.service-theme-yellow .circle-con {
+  background-color: #4cab72;
+}
+
+.service-theme-yellow .why-box {
+  background: linear-gradient(135deg, #dbf4e3, #bee7cc);
+  border: 1px solid #96c7a8;
+}
+
+.service-theme-yellow .why-box-body {
+  color: #235c3b;
+}
+
+.service-theme-yellow .why-box-num {
+  color: #2f7a4f;
+  opacity: 0.45;
+}
+
+
+@media screen and (max-width: 539px) {
+
+.service-theme-yellow .page-top-section::after {
+  content: "";
+  position: absolute;
+  top: -135px;        
+  left: -180px;
+  width: clamp(270px, 160vw, 660px);
+  height: clamp(360px, 130vw, 380px);
+  background: url("./img/bg-ser-1.png") no-repeat center;
+  background-size: contain;
+  transform: rotate(160deg);  
+  pointer-events: none;
+  z-index: 1;
+}
+}

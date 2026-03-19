@@ -1,0 +1,157 @@
+/* General Medicine blue theme override */
+html{
+  font-family: "Poppins", sans-serif;
+}
+.service-theme-yellow {
+  --theme-hero-bg-1: #fff3e4;
+  --theme-hero-bg-2: #ffdab7;
+  --theme-surface: #fffbf7;
+  --theme-surface-soft: #fff4ea;
+  --theme-surface-media: #ffe9d5;
+  --theme-border: #edcfa8;
+  --theme-title: #864d17;
+  --theme-text: #7e5835;
+  --theme-btn-1: #ea984b;
+  --theme-btn-2: #c47124;
+  --theme-btn-text: #ffffff;
+}
+
+
+.service-theme-yellow .page-top-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(to left, #f8ac2075, #ea984b),
+    url("./img/Yoga png.png") no-repeat;
+
+  background-position: right;
+  background-size: contain;
+
+  filter: blur(6px);
+  transform: scale(1.1); /* prevents blur edge cut */
+  z-index: -1;
+}
+
+.service-theme-yellow .page-top-section::after {
+  content: "";
+  position: absolute;
+  top: -75px;        
+  left: -170px;
+  width: clamp(320px, 160vw, 730px);
+  height: clamp(360px, 130vw, 380px);
+  background: url("./img/bg-ser-1.png") no-repeat center;
+  background-size: contain;
+  transform: rotate(150deg);  
+  pointer-events: none;
+  z-index: 1;
+}
+
+.service-theme-yellow .page-top-section h1 {
+  color: #ffffff; 
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(0, 0, 0, 0.2);
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+.service-theme-yellow .page-left-content p {
+  color: #78562f;
+}
+
+.service-theme-yellow .treatment-chain-shell {
+  /* background: #dcedff; */
+}
+
+.service-theme-yellow .treatment-chain-intro h2 {
+  color: #b7681e;
+}
+.service-theme-yellow .treatment-chain-btn {
+  background: linear-gradient(135deg, #f0a762, #d27e2f);
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(233, 233, 233, 0.4);
+}
+.service-theme-yellow .treatment-chain-btn:hover {
+  background: linear-gradient(135deg, #f08f62, #d2702f);
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(233, 233, 233, 0.4);
+}
+
+.service-theme-yellow .treatment-column::before {
+  background: linear-gradient(
+    180deg,
+    rgba(206, 143, 85, 0.12) 0%,
+    rgba(233, 172, 102, 0.26) 50%,
+    rgba(166, 104, 33, 0.08) 100%
+  );
+}
+
+.service-theme-yellow .treatment-card h3 {
+  color: #964707;
+}
+
+.service-theme-yellow .treatment-card-body {
+  background: #ecc19d;
+}
+
+.service-theme-yellow #modalDesc h3 {
+  color: #a04a18;
+}
+
+.service-theme-yellow .modal-cta-btn {
+  border-color: #d2702f;
+  box-shadow: 0 10px 22px rgba(163, 89, 20, 0.28);
+}
+
+.service-theme-yellow .modal-cta-btn:hover {
+  box-shadow: 0 14px 26px rgba(163, 89, 20, 0.36);
+}
+
+.service-theme-yellow .close {
+  color: #ad6225;
+}
+
+.service-theme-yellow .close:hover {
+  color: #723d11;
+}
+
+/* Why Choose section blue overrides */
+.service-theme-yellow .circle-con {
+  background-color: #d58a4d;
+}
+
+.service-theme-yellow .why-box {
+  background: linear-gradient(135deg, #ffebd9, #ffe1be);
+  border: 1px solid #e69f71;
+}
+
+.service-theme-yellow .why-box-body {
+  color: #824c1f;
+}
+
+.service-theme-yellow .why-box-num {
+  color: #b16c34;
+  opacity: 0.45;
+}
+
+
+@media screen and (max-width: 539px) {
+
+.service-theme-yellow .page-top-section::after {
+  content: "";
+  position: absolute;
+  top: -135px;        
+  left: -180px;
+  width: clamp(270px, 160vw, 660px);
+  height: clamp(360px, 130vw, 380px);
+  background: url("./img/bg-ser-1.png") no-repeat center;
+  background-size: contain;
+  transform: rotate(160deg);  
+  pointer-events: none;
+  z-index: 1;
+}
+}
